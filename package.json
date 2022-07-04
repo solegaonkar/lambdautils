@@ -1,0 +1,20 @@
+{
+  "name": "@solegaonkar/lambdautils",
+  "version": "1.0.0",
+  "description": "Handy utility functions for a Lambda Function",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vikas Solegaonkar",
+  "license": "MIT",
+  "repository": "solegaonkar/lambdautils",
+  "keywords": [
+    "aws",
+    "lambda"
+  ],
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.3"
+  }
+}
