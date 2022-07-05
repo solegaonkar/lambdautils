@@ -25,28 +25,28 @@ lambdautils.setLogLevel = (level) => {
 
 lambdautils.error = (error) => {
   console.log(
-    `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - E - ${error}`
+    `${requestId} - E - ${error}`
   );
 };
 
 lambdautils.warn = (warn) => {
   if (loglevel < 3)
     console.log(
-      `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - W - ${warn}`
+      `${requestId} - W - ${warn}`
     );
 };
 
 lambdautils.info = (info) => {
   if (loglevel < 2)
     console.log(
-      `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - I - ${info}`
+      `${requestId} - I - ${info}`
     );
 };
 
 lambdautils.debug = (debug) => {
   if (loglevel === 0)
     console.log(
-      `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - D - ${debug}`
+      `${requestId} - D - ${debug}`
     );
 };
 
