@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const lambdautils = {};
 let requestId = "";
+let loglevel = 0;
 
 const verifyToken = async (event) => {
   requestId = event?.requestContext?.requestId;
@@ -18,28 +19,35 @@ const verifyToken = async (event) => {
   });
 };
 
+lambdautils.setLogLevel = (level) => {
+  loglevel = level;
+};
+
 lambdautils.error = (error) => {
   console.log(
-    `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - ${error}`
+    `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - E - ${error}`
   );
 };
 
 lambdautils.warn = (warn) => {
-  console.log(
-    `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - ${warn}`
-  );
+  if (loglevel < 3)
+    console.log(
+      `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - W - ${warn}`
+    );
 };
 
 lambdautils.info = (info) => {
-  console.log(
-    `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - ${info}`
-  );
+  if (loglevel < 2)
+    console.log(
+      `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - I - ${info}`
+    );
 };
 
 lambdautils.debug = (debug) => {
-  console.log(
-    `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - ${debug}`
-  );
+  if (loglevel === 0)
+    console.log(
+      `${moment().format("yyyy/MM/DD HH:mm:ss")} - ${requestId} - D - ${debug}`
+    );
 };
 
 lambdautils.signToken = async (data, lifeSeconds) =>
@@ -54,6 +62,7 @@ lambdautils.signToken = async (data, lifeSeconds) =>
 lambdautils.parseProxyEvent = async ({ event }) =>
   await verifyToken(event).then((auth) => ({
     body: JSON.parse(event.body),
+    requestId: event?.requestContext?.requestId,
     accountId: event?.requestContext?.accountId,
     requestTime: event?.requestContext?.requestTimeEpoch,
     sourceIp: event?.requestContext?.identity?.sourceIp,
