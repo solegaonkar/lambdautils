@@ -11,11 +11,11 @@ const verifyToken = async (event) => {
       auth = auth.substring("Bearer ".length);
       jwt.verify(auth, process.env.SECRET, (err, decoded) => {
         if (!err) {
-          return resolve(decoded);
+          event.auth = decoded;
         }
       });
     }
-    resolve(null);
+    resolve(event);
   });
 };
 
@@ -50,24 +50,24 @@ lambdautils.debug = (debug) => {
     );
 };
 
-lambdautils.signToken = async (data, lifeSeconds) =>
-  jwt.sign(
+lambdautils.signToken = (data, lifeSeconds) => jwt.sign(
     {
-      exp: lifeSeconds ? Math.floor(Date.now() / 1000) + lifeSeconds : null,
+      exp:  Math.floor(Date.now() / 1000) + (lifeSeconds ? lifeSeconds : 86400),
       data: data,
     },
     process.env.SECRET
   );
 
-lambdautils.parseProxyEvent = async ({ event }) =>
-  await verifyToken(event).then((auth) => ({
+
+lambdautils.parseProxyEvent = async (event) => 
+  await verifyToken(event).then((event) => ({
     body: JSON.parse(event.body),
     requestId: event?.requestContext?.requestId,
     accountId: event?.requestContext?.accountId,
     requestTime: event?.requestContext?.requestTimeEpoch,
     sourceIp: event?.requestContext?.identity?.sourceIp,
     userAgent: event?.requestContext?.identity?.userAgent,
-    authorization: auth,
+    authorization: event.auth,
     apiKey: event?.headers["x-api-key"],
   }));
 
