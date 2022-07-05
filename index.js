@@ -80,4 +80,4 @@ lambdautils.respond = async (response) => ({
   },
   body: JSON.stringify(await response),
 });
-export default lambdautils;
+module.exports = lambdautils;
