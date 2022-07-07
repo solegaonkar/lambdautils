@@ -6,12 +6,12 @@ let loglevel = 0;
 const verifyToken = async (event) => {
   requestId = event?.requestContext?.requestId;
   return new Promise((resolve, reject) => {
-    let auth = event?.headers?.Authorization;
+    let auth = event?.headers?.authorization;
     if (auth && auth.startsWith("Bearer ")) {
       auth = auth.substring("Bearer ".length);
       jwt.verify(auth, process.env.SECRET, (err, decoded) => {
         if (!err) {
-          event.auth = decoded;
+          event.auth = decoded.data;
         }
       });
     }
