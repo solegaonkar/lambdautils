@@ -6,7 +6,7 @@ let loglevel = 0;
 const verifyToken = async (event) => {
   requestId = event?.requestContext?.requestId;
   return new Promise((resolve, reject) => {
-    let auth = event?.headers?.authorization;
+    let auth = event?.headers?.authorization || event?.headers?.Authorization;
     if (auth && auth.startsWith("Bearer ")) {
       auth = auth.substring("Bearer ".length);
       jwt.verify(auth, process.env.SECRET, (err, decoded) => {
